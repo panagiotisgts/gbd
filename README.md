@@ -20,6 +20,12 @@ Another unique feature of the CLI tool is the ability to perform hot-reload of t
 either manually or when modifying the source file, resulting in the termination and the redeployment of the containers which
 were part of the stack (or new ones).
 
+## Installation
+You can install via the GitHub generated releases or via the Go toolchain
+
+  > go install github.com/PanagiotisGts/gbd/cmd/gbd@latest 
+
+
 ## Docker Inspect JSON Path dynamic params
  - `{NETWORK_ID}` - The ID of the network the stack is deployed to (generated)
 
@@ -99,7 +105,7 @@ package test
 import (
 	"context"
 
-	"github.com/panosg/gbd/pkg/gbd"
+	"github.com/PanagiotisGts/gbd/pkg/gbd"
 	"github.com/testcontainers/testcontainers-go/wait"
 )
 
@@ -107,54 +113,54 @@ func main() {
 	ctx := context.Background()
 	ctDir := "/usr/projects/my_service"
 	e := gbd.NewEnv(ctDir, []gbd.Dependency{
-		{
-			Image:   "postgres",
-			Version: "latest",
-			Name:    "test-postgres",
-			Env: map[string]string{
-				"POSTGRES_USER":     "admin",
-				"POSTGRES_PASSWORD": "root",
-				"POSTGRES_DB":       "test_db",
-			},
-			ExposePorts: []string{"5432"},
-			Alias:       "pgtc",
-			WaitFor: gbd.WaitFor{
-				Strategy:        "log",
-				WaitForStrategy: wait.ForLog("database system is ready to accept connections"),
-			},
-		},
-		{
-            Image:   "my_service",
-            Version: "latest",
-            Name:    "my-service",
-            Build: &gbd.DockerBuild{
-                Dockerfile: "Dockerfile",
-                BuildArgs:  map[string]*string{},
-                BuildLog:   true,
-            },
-            ExposePorts: []string{"8080"},
-            ReplaceConfig: []gbd.ConfigReplacement{
-                {
-                    ConfigOriginPath: "/configs/config.yaml",
-                    TargetPath:       "/configs/config.yaml",
-                    Replacements: []gbd.Replacement{
-                        {
-                            Key: "database.host",
-                            Value: &gbd.ContainerDerivedValue{
-                                FromContainer:         "test-postgres",
-                                ContainerPropertyPath: "NetworkSettings.Networks[{NETWORK_ID}].Aliases[0]",
-                            },
-                        },
-                        {
-                            Key:   "server.address",
-                            Value: ":8080",
-                        },
-                    },
+      {
+        Image:   "postgres",
+        Version: "latest",
+        Name:    "test-postgres",
+        Env: map[string]string{
+          "POSTGRES_USER":     "admin",
+          "POSTGRES_PASSWORD": "root",
+          "POSTGRES_DB":       "test_db",
+        },
+        ExposePorts: []string{"5432"},
+        Alias:       "pgtc",
+        WaitFor: gbd.WaitFor{
+          Strategy:        "log",
+          WaitForStrategy: wait.ForLog("database system is ready to accept connections"),
+        },
+      },
+      {
+        Image:   "my_service",
+        Version: "latest",
+        Name:    "my-service",
+        Build: &gbd.DockerBuild{
+          Dockerfile: "Dockerfile",
+          BuildArgs:  map[string]*string{},
+          BuildLog:   true,
+        },
+        ExposePorts: []string{"8080"},
+        ReplaceConfig: []gbd.ConfigReplacement{
+          {
+            ConfigOriginPath: "/configs/config.yaml",
+            TargetPath:       "/configs/config.yaml",
+            Replacements: []gbd.Replacement{
+              {
+                Key: "database.host",
+                Value: &gbd.ContainerDerivedValue{
+                  FromContainer:         "test-postgres",
+                  ContainerPropertyPath: "NetworkSettings.Networks[{NETWORK_ID}].Aliases[0]",
+                },
               },
-		    },
-            Alias:   "my-awesome-service
-            WaitFor: gbd.WaitFor{Strategy: "log", WaitForStrategy: wait.ForLog("service is ready to serve requests")},
-	    },
+              {
+                Key:   "server.address",
+                Value: ":8080",
+              },
+            },
+          },
+        },
+        Alias:   "my-awesome-service",
+        WaitFor: gbd.WaitFor{Strategy: "log", WaitForStrategy: wait.ForLog("service is ready to serve requests")},
+    },
 	})
 
 	stack, err := e.Build(ctx, true)
