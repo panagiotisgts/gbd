@@ -1,4 +1,4 @@
-module github.com/panosg/gbd
+module github.com/PanagiotisGts/gbd
 
 go 1.21
 
