@@ -13,7 +13,7 @@ import (
 	"github.com/testcontainers/testcontainers-go"
 	"gopkg.in/yaml.v3"
 
-	"github.com/panosg/gbd/internal/utils"
+	"github.com/PanagiotisGts/gbd/internal/utils"
 )
 
 type Stack struct {

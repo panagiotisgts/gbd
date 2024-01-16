@@ -12,7 +12,7 @@ import (
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/cobra"
 
-	"github.com/panosg/gbd/pkg/gbd"
+	"github.com/PanagiotisGts/gbd/pkg/gbd"
 )
 
 var stack *gbd.Stack

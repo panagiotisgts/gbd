@@ -14,7 +14,7 @@ import (
 	"github.com/testcontainers/testcontainers-go/network"
 	"gopkg.in/yaml.v3"
 
-	"github.com/panosg/gbd/internal/utils"
+	"github.com/PanagiotisGts/gbd/internal/utils"
 )
 
 type Env struct {
