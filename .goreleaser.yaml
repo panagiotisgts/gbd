@@ -1,0 +1,49 @@
+release:
+  github:
+    owner: panagiotisgts
+    name: gbd
+
+before:
+  hooks:
+    # You may remove this if you don't use go modules.
+    - go mod tidy
+    # you may remove this if you don't need go generate
+    - go generate ./...
+
+builds:
+  - id: linux-amd64
+    binary: gbd-linux-{{ .Arch }}
+    main: ./cmd/gbd/gbd.go
+    goos:
+      - linux
+    goarch:
+      - amd64
+    ldflags:
+      - -s -w -X main.version={{.Version}}
+    no_unique_dist_dir: true
+
+  - id: gbd-amd64
+    binary: gbd-darwin-{{ .Arch }}
+    main: ./cmd/gbd/gbd.go
+    goos:
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w -X main.version={{.Version}}
+    no_unique_dist_dir: true
+
+archives:
+  - format: tar.gz
+    name_template: '{{.ProjectName}}_{{.Version}}_{{.Os}}-{{.Arch}}'
+    format_overrides:
+      - goos: windows
+        format: zip
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"

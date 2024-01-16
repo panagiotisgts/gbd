@@ -17,6 +17,8 @@ import (
 
 var stack *gbd.Stack
 
+var version = "0.0.1"
+
 func main() {
 
 	var config string
@@ -42,9 +44,11 @@ func main() {
 	watchConfig.Flags().StringVarP(&config, "config", "f", "", "config file (*.yaml) from context path")
 	watchConfig.Flags().BoolVarP(&dumpConfig, "dump", "d", false, "dump config file to context path")
 
-	var rootCmd = &cobra.Command{Use: "gbd"}
+	var rootCmd = &cobra.Command{Use: "gbd", Version: version}
 	rootCmd.AddCommand(dryRun)
 	rootCmd.AddCommand(watchConfig)
+
+	log.Printf("GBD - GoBrewDock %s\n", version)
 
 	if err := rootCmd.Execute(); err != nil {
 		log.Println(err)
