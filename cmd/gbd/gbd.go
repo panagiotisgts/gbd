@@ -137,7 +137,7 @@ func watchConfig(cmd *cobra.Command, args []string) {
 }
 
 func buildStack(ctx context.Context, path string, dump bool) *gbd.Stack {
-	env, err := gbd.NewEnvFromConfig(path)
+	env, err := gbd.NewFromConfig(path)
 	if err != nil {
 		log.Println(err)
 		os.Exit(1)
@@ -158,7 +158,7 @@ func handleReload(ctx context.Context, path string, dump bool) error {
 	}
 	time.Sleep(5 * time.Second)
 	stack = buildStack(ctx, path, dump)
-	env, err := gbd.NewEnvFromConfig(path)
+	env, err := gbd.NewFromConfig(path)
 	if err != nil {
 		return err
 	}

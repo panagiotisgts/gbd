@@ -2,6 +2,7 @@ package utils
 
 import (
 	"encoding/json"
+	"math"
 
 	"github.com/AsaiYusuke/jsonpath"
 )
@@ -21,5 +22,19 @@ func FindValueInJson(source []byte, path string) (any, error) {
 		return nil, err
 	}
 
-	return jsonNode[0].(jsonpath.Accessor).Get(), nil
+	return parseValue(jsonNode[0].(jsonpath.Accessor).Get()), nil
+}
+
+func parseValue(val any) any {
+	switch val.(type) {
+	case string, bool, []any:
+		return val
+	case float64, float32:
+		if math.Trunc(val.(float64)) == val.(float64) {
+			return int(val.(float64))
+		}
+		return val.(float64)
+	default:
+		return nil
+	}
 }

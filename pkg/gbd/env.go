@@ -39,7 +39,7 @@ func (e *Env) Build(ctx context.Context, dumpConfig bool) (*Stack, error) {
 		network: nw,
 	}
 	stack.workDir = e.ContextDir
-	stack.tempDir = e.ContextDir + "env_builder"
+	stack.tempDir = filepath.Join(e.ContextDir, "gbd_temp")
 	err = os.Mkdir(stack.tempDir, 0755)
 	if err != nil {
 		return nil, err
@@ -47,7 +47,7 @@ func (e *Env) Build(ctx context.Context, dumpConfig bool) (*Stack, error) {
 
 	if dumpConfig {
 		b, _ := yaml.Marshal(e)
-		if err := os.WriteFile(filepath.Join(stack.workDir, "test_env.yaml"), b, 0644); err != nil {
+		if err := os.WriteFile(filepath.Join(stack.workDir, "gbd_config.yaml"), b, 0644); err != nil {
 			fmt.Println(err)
 		}
 	}

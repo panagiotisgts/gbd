@@ -112,7 +112,7 @@ import (
 func main() {
 	ctx := context.Background()
 	ctDir := "/usr/projects/my_service"
-	e := gbd.NewEnv(ctDir, []gbd.Dependency{
+	e := gbd.New(ctDir, []gbd.Dependency{
       {
         Image:   "postgres",
         Version: "latest",

@@ -14,7 +14,7 @@ func InspectContainer(ctx context.Context, image, version string) ([]byte, error
 	if err != nil {
 		return nil, err
 	}
-	ctr, err := findContainer(image, version, cli)
+	ctr, err := FindContainer(image, version, cli)
 	if err != nil {
 		return nil, err
 	}
@@ -26,7 +26,7 @@ func InspectContainer(ctx context.Context, image, version string) ([]byte, error
 	return json, nil
 }
 
-func findContainer(image, version string, cli *client.Client) (string, error) {
+func FindContainer(image, version string, cli *client.Client) (string, error) {
 	f2 := filters.NewArgs(filters.KeyValuePair{Key: "ancestor", Value: fmt.Sprintf("%s:%s", image, version)})
 	r, err := cli.ContainerList(context.Background(), types.ContainerListOptions{All: true, Filters: f2})
 	if err != nil {

@@ -5,9 +5,7 @@ release:
 
 before:
   hooks:
-    # You may remove this if you don't use go modules.
     - go mod tidy
-    # you may remove this if you don't need go generate
     - go generate ./...
 
 builds:
@@ -22,7 +20,7 @@ builds:
       - -s -w -X main.version={{.Version}}
     no_unique_dist_dir: true
 
-  - id: gbd-amd64
+  - id: darwin-amd64
     binary: gbd-darwin-{{ .Arch }}
     main: ./cmd/gbd/gbd.go
     goos:
